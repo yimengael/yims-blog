@@ -12,7 +12,7 @@ vendor
 ###################
 ## Intellij IDEA ##
 ###################
-.idea/
+.idea
 *.iml
 *.ipr
 
