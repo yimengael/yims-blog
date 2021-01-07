@@ -1,1 +1,1 @@
-# yims-blog
+# Gael Yimen Yimga's Blog.
