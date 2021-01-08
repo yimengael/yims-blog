@@ -26,8 +26,20 @@ description: >- # this means to ignore newlines until "baseurl:"
   and entrepreneurship.
 baseurl: "/yims-blog" # the subpath of your site, e.g. /blog
 url: "https://yimengael.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: yimengael
+twitter_username: yimson
 github_username:  yimengael
+
+# Fields minima uses, but are not defaulted with the jekyll new command.
+# Author is the default for posts, the RSS feed, and is used in the footer.
+subtitle: Life, Entrepreneurship, Software engineering
+show_excerpts: true
+author: Gael Yimen Yimga
+linkedin_username: gael-yimen-yimga
+
+# New fields not defaulted by Jekyll-new with the minima theme
+# Add a copyright. A copyright symbol and year will be added automatically
+# copyright: Author Name or Company name
+copyright: Gael Yimen Yimga
 
 # Build settings
 # Remove minima theme as it is now a regular theme
