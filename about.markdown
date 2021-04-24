@@ -3,16 +3,11 @@ layout: page
 title: About
 permalink: /about/
 ---
+## Our Mission
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+## Our story
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+## Our History
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll
+You can find the source code of this blog at GitHub:
+[Gael Yimen Yimga's blog](https://github.com/yimengael/yims-blog)
