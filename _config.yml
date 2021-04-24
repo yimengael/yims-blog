@@ -21,7 +21,7 @@
 title: Gael Yimen Yimga
 email: gael@yimenyimga.com
 description: >- # this means to ignore newlines until "baseurl:"
-  This is about random thoughts about life experience,
+  This is for random thoughts about life experience,
   software engineering experience, personal development
   and entrepreneurship.
 # We deleted this baseurl because we want to config the custom url
