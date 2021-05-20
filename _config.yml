@@ -37,6 +37,9 @@ show_excerpts: true
 author: Gael Yimen Yimga
 linkedin_username: gael-yimen-93819121
 
+# Adding the google analytics configuration
+google_analytics: UA-197552345-1
+
 # New fields not defaulted by Jekyll-new with the minima theme
 # Add a copyright. A copyright symbol and year will be added automatically
 # copyright: Author Name or Company name
