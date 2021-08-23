@@ -1,0 +1,77 @@
+---
+layout: post
+title:  "Dynamic Programming"
+date:   2021-08-17 12:40:58 -0800
+background: '/img/posts/Dynamic-Programming.png'
+---
+<p><code>Dynamic programming</code> is a common subject that can appear in any type of technical interviews. It is defined as a mathematical optimization method and a computer programming method that consists of the selection of the best element, regarding some criterion, from some sets of available alternatives. [<a href="https://en.wikipedia.org/wiki/Dynamic_programming">1</a>][<a href="https://en.wikipedia.org/wiki/Mathematical_optimization">2</a>].</p>
+<h2>How to identify a DP problem</h2>
+<p>Coding interview is another discipline itself and to be successful, you need to know the rules. To identify a dynamic programming problem, there are some clues you need to know.
+<ul>
+    <li>First, sometime when a question is asking about the number of ways to do something, it could probably be a dynamic programming problem. Let see a second clue that can solidify your thought.</li>
+    <li>Second, if there is a need to make decision that depends on previously made decisions then we are convince that we are in front of a dynamic programming problem and we need to treat it as such.</li>
+</ul>
+</p>
+<h2>How to solve DP problem</h2>
+<p>A dynamic programming problem has most likely 3 components. The 3 components that we are going to discuss are extremely valuable as most dynamic programming problem can be solved this way.
+<ul>
+    <li>The first component we need to identify to solve a DP problem is a function or an array that represents the answer to a problem from a given state.</li>
+    <li>The second component is to identify a way to transition between states. This can be considered as a recurrence relation as we describe in our previous article about recursion. Generally, in DP problem, figuring out the recurrence relation seems to be the hardest part to solve the problem.</li>
+    <li>The third component is establishing the base cases as in the recursion.</li>
+</ul>
+    Let discuss all those concepts in a typical DP problem.
+</p>
+<h2>Example of problem that we can solve with DP – <a href="https://leetcode.com/problems/paint-fence/">Leetcode 276</a> : <a href="https://leetcode.com/problems/paint-fence/">Paint fence</a>.</h2>
+<p>Let consider a problem that is titled: <code>Paint Fence</code>. The problem is the number 276 in Leetcode.com. The description of the problem goes:<br/>You are painting a fence of <code>n</code> posts with <code>k</code> different colors. You must paint the posts following these rules:
+<ul>
+    <li>Every post must be painted exactly one color.</li>
+    <li>There cannot be three or more consecutive posts with the same color.</li>
+</ul>
+Given the two integers <code>n</code> and <code>k</code>, return the number of ways you can paint the fence.
+</p>
+<h2>Resolution of previous problem</h2>
+<h3>Is this problem a DP problem?</h3>
+<p>First the problem is asking about the number of ways to do something, here it is the number of ways to paint fences. Then we need to decide what color we should paint a given post, which may change depending on previous decisions. For instance, if we paint the first two in the same color, then we are not allowed to paint the third post the same color. The answer is <code>YES</code>, we are facing a DP problem.</p>
+<h3>Solving the problem</h3>
+<p>First, we need a function or an array that represents the answer to the problem for a given state. For this problem, let say we have a function <code>totalWays</code>, where <code>totalWays(i)</code> returns the number of ways to paint <code>i</code> posts. Because we only have one argument, this is a <code>1-dimensional</code> DP problem.</p>
+<p>Second, the transition between states can be for example <code>totalWays(3)</code> and <code>totalWays(4)</code>. We have a paragraph about finding the recurrence relation. We will come back to that later.</p>
+<p>Third, let discuss the base cases. If we have one post, there are <code>k</code> ways to paint it, because there are <code>k</code> different colors. If we have two posts, there are <code>k * k</code> ways to paint them because we are allowed to paint two posts in a row with the same color. Therefore <code>totalWays(1) = k, totalWays(2) = k * k</code></p>
+<h3>Finding the recursion relation</h3>
+<p>We know the values for <code>totalWays(1)</code> and <code>totalWays(2)</code>, now we need a formula for <code>totalWays(i)</code> when <code>3 <= i <= n</code>. Let’s think about how many ways there are to point the <code>i-th</code> post. We have two options.
+<ul>
+    <li>Use a different color than the previous post. If we use a different color, then there are <code>k-1</code> colors for us to use.  This means there are <code>(k-1) * totalWays(i-1)</code> ways to point the <code>i-th</code> post a different color than the <code>(i-1)th</code> post.</li>
+    <li>Use the same color as the previous post. There is only one color for us to use, so there are <code>1 * totalWays(i-1)</code> ways to paint the <code>i-th</code> post the same color as the <code>(i-1)-th</code> post. However, we have the added restriction of not being allowed to point three posts in a row the same color. Therefore, we can paint the <code>i-th</code> post the same color as the <code>(i-1)-th</code> post only if the <code>(i-1)-th</code> post is a different color than the <code>(i-2)-th</code> post.</li>
+    <li>So, how many ways are there to paint the <code>(i-1)-th</code> post a different color than the <code>(i-2)-th</code> post ? Well, as stated in the first option, there are <code>(k - 1)*totalWays(i - 1)</code> ways to paint the <code>i-th</code> post a different color than the <code>(i-1)-th</code> post, so that means there are <code>1 * (k - 1) * totalWays(i - 2)</code> ways to paint the <code>(i - 1)-th</code> post a different color than the <code>(i - 2)-th</code> post. Adding these scenarios together gives <code>totalWays(i) = (k-1) * totalWays(i-1) + (k -1) * totalWays(i-2)</code> which can be simplified to <code>totalWays(i) = (k-1) * (totalWays(i-1) + totalWays(i-2))</code>. This is our recurrence relation which can be used to solve the problem from base case.</li>
+</ul>
+</p>
+<h3>Code</h3>
+<pre><code>
+    class Solution {
+        private Map&lt;Integer, Integer&gt; map = new HashMap<>();
+        public int numWays(int n, int k) {
+            // Base cases
+            if (n == 1) return k;
+            if (n == 2) return k * k;
+
+            // Memoization: Check if we already precalculated the result
+            if (map.containsKey(n)) return map.get(n);
+
+            // Recurrence relation to compute
+            int result = (k - 1) * (numWays(n - 1, k) + numWays(n - 2, k));
+
+            // Storing the result
+            map.put(n, result);
+
+            // Return the result.
+            return result;
+        }
+    }
+</code></pre>
+<h3>References</h3>
+<ul>
+    <li>[1] - <a href="https://en.wikipedia.org/wiki/Dynamic_programming">https://en.wikipedia.org/wiki/Dynamic_programming</a></li>
+    <li>[2] - <a href="https://en.wikipedia.org/wiki/Mathematical_optimization">https://en.wikipedia.org/wiki/Mathematical_optimization</a></li>
+    <li>[3] - <a href="https://leetcode.com/problems/paint-fence/solution/">https://leetcode.com/problems/paint-fence/solution/</a></li>
+</ul>
+<h3>Glossary</h3>
+<p>DP: Dynamic Programming</p>

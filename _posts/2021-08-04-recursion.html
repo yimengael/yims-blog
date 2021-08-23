@@ -1,0 +1,169 @@
+---
+layout: post
+title:  "Recursion"
+date:   2021-08-04 12:40:58 -0800
+background: '/img/posts/Recursion-Image.png'
+---
+<h1>Introduction.</h1>
+<p>Hey Guys, today we are going to break our routine where we always speak about life experience and get back to the technical stuffs here. We are going to discuss a common subject in software engineering that any engineer should know about for many reasons. As a software engineer, you will need to know this approach to understand how to design and solve some sort of problems using <code>divide and conquer</code> method, you will need to know that approach to write elegant and simple code to solve complex problems, you will need to know that concept to pass some phone screen interviews and some coding sessions interviews. The concept I’m talking about is <code>recursion</code>.</p>
+<h1>Recursion principles.</h1>
+<p>Recursion is a popular concept in the world of software programming. Recursion is a concept of solving problems using <code>a function that calls itself as a subroutine</code>. Yes, you heard it well, a function can call itself, in that situation we are recurring. In a live situation, when a function calls itself, this can continue until a point where the function can not call itself anymore because we reach a <code>base case</code> or because we reach a point where the allocated memory buffer for call function overflowed. In this later case, we are in <code>Stack Overflow</code> situation and your program crashes. So a recursive function should have the following properties so that it does not result in a infinite loop:
+<ul><li>A simple <code>base case</code> (or many base cases) : this is the termination scenario that does not use a recursion to return a result</li><li>A set of rules, also known as a <code>recurrence relation</code>, that reduces other cases towards the base case.</li></ul>
+
+Let's show some examples of recursion functions: <br/><br/>
+
+<b>Reverse a string</b>
+<pre>
+<code>
+    class Solution {
+        public void reverseString(char[] s) {
+            reverseStringHelper(s, 0, s.length - 1);
+        }
+        public void reverseStringHelper(char[] s, int left, int right) {
+            if (left > right) return;
+            reverseStringHelper(s, left+1, right-1);
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+        }
+    }
+</code>
+</pre><br/>
+
+<b>Swap nodes in pairs</b>
+<pre>
+<code>
+    class Solution {
+        public ListNode swapPairs(ListNode head) {
+            if (head == null || head.next == null) {
+                return head;
+            }
+            swapPairs(head.next.next);
+            int temp = head.val;
+            head.val = head.next.val;
+            head.next.val = temp;
+            return head;
+        }
+    }
+</code>
+</pre>
+</p>
+
+<h1>Recurrence relation.</h1>
+<p>Whenever you have to implement a recursive function, always think about two things that you need to figure out: the <code>base case</code> and the <code>recurrence relation</code>.
+<ul><li>Base case: This is the case where one can compute the answer directly. In the base you just return the answer for the basic situation like if there was no recursion.</li><li>Recurrence relation: This is the relationship between the result of a problem and the result of the sub-problem, given that in the recursion, we are just subdividing the problem into sub-problems. Each recursion represents a sub-problem.</li></ul>
+</p>
+<h2>Illustration with Pascal triangle</h2>
+<p>Let explain the recurrence relation with the example of Pascal triangle. You can have more details about Pascal triangle <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">here</a></p>
+<p>Pascal's triangle is a series of numbers arranged in the shape of triangle. In Pascal's triangle, the leftmost and the rightmost numbers of each row are always 1. For the rest, each number is the sum of the two numbers directly above it in the previous row.</p>
+<img src="/img/posts/Pascal-Triangle-01.png" />
+<h2>Base case</h2>
+<p>As we can see, in each line in the Pascal triangle, the leftmost element and the rightmost element are always equal to 1. How can we translate that into a base case rule? We can define the base case as follows : <code>f(i,j)=1, where j=1 or j=i</code></p>
+<h2>Recurrence relation</h2>
+<p>First, we define a function <code>f(i,j)</code> which returns the number in the Pascal triangle in the <code>i-th</code> row and the <code>j-th</code> column. <br />We then can represent the recurrence relation with the following formula: <code>f(i,j) = f(i−1,j−1) + f(i−1,j)</code></p>
+<h2>Demo</h2>
+<p>Let try to calculate <code>f(5, 3)</code>.
+<code>f(5,3) = f(4,2) + f(4,3)</code>, we then call <code>f(4, 2)</code> and <code>f(4, 3)</code> recursively:
+<ul>
+    <li>For the call of <code>f(4, 2)</code>, we could extend it further until we reach the base cases, as follows : <br/> <code>f(4, 2) = f(3, 1) + f(3, 2) = f(3, 1) + (f(2, 1) + f(2, 2)) = 1 + (1 + 1) = 3</code></li>
+    <li>For the call of <code>f(4, 3)</code>, similarly we break it down as : <br/> <code>f(4, 3) = f(3, 2) + f(3, 3) = (f(2, 1) + f(2, 2)) + f(3, 3) = (1 + 1) + 1 = 3</code></li>
+    <li>Finally, we combine the results of the above sub-problems: <code>f(5, 3) = f(4, 2) + f(4, 3) = 3 + 3 = 6</code> </li>
+</ul>
+</p>
+<h2>Example of code to illustrate the recursion with Pascal triangle</h2>
+<b>Return the i-th line of the Pascal triangle</b>
+<pre>
+<code>
+    class Solution {
+        public List&lt;Integer&gt; getRow(int rowIndex) {
+            // Base case
+            if (rowIndex == 0) {
+                return Arrays.asList(1);
+            }
+            if (rowIndex == 1) {
+                return Arrays.asList(1,1);
+            }
+
+            //Recurrence relation
+            List&lt;Integer&gt; inter = getRow(rowIndex - 1);
+            ArrayList&lt;Integer&gt; result = new ArrayList<>(Arrays.asList(1));
+            for (int i = 0; i < inter.size() - 1; i++) {
+                result.add(inter.get(i) + inter.get(i+1));
+            }
+            result.add(1);
+
+            // Returning result
+            return result;
+        }
+    }
+</code>
+</pre>
+<p>In the above demo, we noticed that there are couple of values that are calculated more than one time. When we are doing this, we are wasting time. Later in this article, we are going to see how we can leverage that advantage of already calculated item to improve performance of our algorithm.</p>
+<h1>Memoization</h1>
+<p><code>Memoization</code> is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again. (Source: <a href="https://en.wikipedia.org/wiki/Memoization">wikipedia</a>)</p>
+<p>Memoization is all about storing the result of pre-calculation in order to reuse them in the future calculation if we need to. This can considerably increase the performance of the algorithm, but in the other hand we have to sacrifice some space to store those results.</p>
+<p>To illustrate, let consider the famous Fibonacci series. It is given by the following formula: <br /> <code>F(n) = F(n - 1) + F(n - 2)</code> with the base cases: <code>F(0) = 0</code>, <code>F(1) = 1</code>. The simple code that can solve this problem is the following:<br /></p>
+<pre>
+<code>
+    public int fibonacci(int n) {
+        if (n < 2) {
+            return n;
+        } else {
+            return fibonacci(n-1) + fibonacci(n-2);
+        }
+    }
+</code>
+</pre>
+<p>Let suppose that we want to calculate <code>F(4)</code>. <code>F(4) = F(3) + F(2) = (F(2) + F(1)) + F(2)</code>. As you can see, in order to obtain the result for <code>F(4)</code>, we would need to calculate the number <code>F(2)</code> twice following the above deduction: the first time in the first extension of <code>F(4)</code> and the second time for the intermediate result <code>F(3)</code>. Please look at the image below to visualize the duplicate calculations.</p>
+<img src="/img/posts/Fibonacci-01.png" />
+<p>In order to eliminate the duplicate, we would have to store the intermediate results in the cache in order to use them later without recalculate them when the time comes.<br />For our example with Fibonacci, we will have to use an <code>HashMap</code> to store the intermediate results of <code>F(n)</code> where the key in the <code>Hashmap</code> is the value n. Below is an example of code of Fibonacci using the HashMap as a cache.</p>
+<pre><code>
+    class Solution {
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;() &#x7B;&#x7B;
+            put(0, 0);
+            put(1, 1);
+        &#125;&#125;;
+
+        public int fib(int n) {
+            if (map.containsKey(n)) return map.get(n);
+            int result = fib(n - 1) + fib(n - 2);
+            map.put(n, result);
+            return result;
+        }
+    }
+</code></pre>
+<h1>Complexity analysis</h1>
+<h2>Time complexity</h2>
+<p>In order to understand how your algorithm is performing, you will need to calculate the complexity for your recursion. <br /> Given a recursion algorithm, its time complexity <code>O(T)</code> is typically the product of <b>the number of recursion invocations</b> (denoted as R) and the time complexity of calculation (denoted as <code>O(s)</code>) that incurs along with each recursion call: <br /> <code>O(T) = R ∗ O(s)</code>
+</p>
+<h3>Print a string in reverse order</h3>
+<p>In the problem of reversing a String, A recurrence relation can be expressed as follows: <br /> <code>printReverse(str, 0, n) = printReverse(str, 1, n) + print(str[0])</code>.<br/>As you can see, the function will be recursively invoked <code>n</code> times, where n is the size of the input string. At the end of each recursion, we simply print the leading character, therefore the time complexity of this particular operation is constant , ie <code>O(1)</code>. <br />To sum up, the overall time complexity of our recursive function <code>printReverse(str, 0, n)</code> would be <code>O(printReverse) = n * O(1) = O(n)</code>.</p>
+<h3>Execution tree</h3>
+<p>For recursive functions, it is rarely the case that the number of recursion calls happens to be linear to the size of the input. For instance, let consider the case of <code>Fibonacci</code> series. The recurrence relation is defined as <code>F(n) = F(n-1) + F(n-2)</code>. It does not seem straightforward to calculate the number of recursion invocations during the execution of the Fibonacci function.</p>
+<p>In this case, it is better resort to the execution tree, which is a tree that is used to denote the execution flow of a recursive function in particular. Each node in the tree represents an invocation of the recursive function. Therefore, the total number of nodes in the tree corresponds to the number of recursion calls during the execution.</p>
+<p>The execution tree of a recursive function would form an <code>n-ary</code> tree, with <code>n</code> as the number of times recursion appears in the recurrence relation. For instance, the execution of the Fibonacci function would form a binary tree, as one can see from the following graph which shows the execution tree for the calculation of Fibonacci number <code>F(4)</code>.</p>
+<img src="/img/posts/Fibonacci-01.png" />
+<p>In a full binary tree with <code>n</code> levels, the total number of nodes would be <code>2^n - 1</code>. Therefore, the upper bound (though not tight) for the number of recursions in <code>f(n)</code> would be <code>2^n -1</code>, as well. As a result, we can estimate that the time complexity for <code>F(n)</code> would be <code>O(2^n)</code>.</p>
+<h3>Memoization</h3>
+<p>Previously, we discussed the technique of memoization that is often applied to optimize the time complexity of recursion algorithms. By caching and reusing the intermediate results, memoization can greatly reduce the number of recursion calls, ie reducing the number of branches in the execution tree. One should take this reduction into account when analyzing the time complexity of recursion algorithms with memoization.</p>
+<p>Let's get back to our example of Fibonacci number. With memoization, we save the result of Fibonacci number for each index <code>n</code>. We are assured that the calculation for each Fibonacci number would occur only once. And we know, from the recurrence relation, the Fibonacci number <code>F(n)</code> would depend on all <code>n-1</code> precedent Fibonacci numbers. As a result, the recursion to calculate <code>F(n)</code> would be invoked <code>n-1</code> times to calculate all the precedent numbers that it depends on.</p>
+<p>Now, we can simply apply the formula we introduced in the beginning of this chapter to calculate the time complexity, which is <code>O(1) * n = O(n)</code>. Memoization not only optimizes the time complexity of algorithm, but also simplifies the calculation of time complexity.</p>
+<h1>Examples of problems using recursion</h1>
+<h2>Maximum depth of a binary tree</h2>
+<p>In this problem, you are given a binary tree and you are asked to calculate the maximum depth of the given tree. A binary tree’s maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
+<p>The base case that we can define here is when the given tree is empty. That means of the <code>root == null</code>. In this case, we just have to return <code>0</code>.<br /> Now we are thinking about the recursion relation. In the otherwise case, we should assume that we have at least the root as a node and eventually a left subtree and a right subtree. So that means, we need to count the root node as 1 in the <code>maxDepth</code> of the global tree and then add the maximum between the max depth of the left subtree and the max depth of the right subtree. This gives us the below code.</p>
+<pre><code>
+    class Solution {
+        public int maxDepth(TreeNode root) {
+            if (root == null) return 0;
+            return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+        }
+    }
+</code></pre>
+<h1>Conclusion</h1>
+<p>In this article, we focused of the main concept of recursion. Recursion is a beautiful concept in Software programming. With the recursion, we can write simple, beautiful and elegant code to solve complex problems. <br />We discussed the general workflow to solve a recursion problem. One needs to define the recursion function, write down the recurrence relation and the base case. Sometimes to improve the time and space complexity, one needs to incorporate the memoization that consists of storing the intermediate results in order to reuse them late when need be.</p>
+<h1>References</h1>
+<p>Most of the credit of this article should be given to Leetcode. <a href="https://leetcode.com/explore/featured/card/recursion-i/">https://leetcode.com/explore/featured/card/recursion-i/</a></p>
+
+
+
